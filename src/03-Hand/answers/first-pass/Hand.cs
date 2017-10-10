@@ -10,10 +10,10 @@ namespace CsharpPoker
 {
     public class Hand
     {
-        // private readonly setter for cards, initilaizes a new List<Card>
+        // private readonly setter for cards, initialize a new List<Card>
         private readonly List<Card> cards = new List<Card>();
 
-        // To limit mutablility of the Cards property, an IEnumerable is returned instead of List
+        // To limit mutation of the Cards property, an IEnumerable is returned instead of List
         // Cards is mutable but only by calling Draw
         public IEnumerable<Card> Cards { get { return cards; } }
 
@@ -23,10 +23,23 @@ namespace CsharpPoker
         }
 
         // A LINQ Aggregate is used to find the HighCard
-        // OrderBy is also valid, but could use more resources than Aggregate
         public Card HighCard()
         {
-            return cards.Aggregate((result, nextCard) => result.Value > nextCard.Value ? result : nextCard);
+            return cards.Aggregate((highCard, nextCard) => nextCard.Value > highCard.Value ? nextCard : highCard);
+        
+            // Imperative programming works too, but is very lengthy and introduces variables
+
+            // Card highCard = Cards[0];
+            // foreach (var nextCard in Cards)
+            // {
+            //     if (nextCard.Value > highCard.Value)
+            //     {
+            //         highCard = nextCard;
+            //     }
+            // }
+            // return highCard;
+
+            // OrderBy is also valid, but could use more resources than Aggregate
             //return cards.OrderBy(c => c.Value).Last();
         }
         

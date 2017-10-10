@@ -43,7 +43,7 @@ namespace CsharpPoker
         /* Since a collection of pairs needs to be built, a mutable collection must be temporarily created.
          Because the scope is limited, risk for side-effect is minimal. In addition, the ConcurrentDictionary's AddOrUpdate method is Thread Safe.
          While the ConcurrentDictionary mutates state via AddOrUpdate, it does use a functional principal called a higher order function.
-         Higer order functions are simply a function that accepts or returns another function. 
+         Higher order functions are simply a function that accepts or returns another function. 
          The AddOrUpdate method accepts a function which delegates how the item is updated.
         */ 
         private IEnumerable<KeyValuePair<CardValue, int>> GetPairs(IEnumerable<Card> cards)

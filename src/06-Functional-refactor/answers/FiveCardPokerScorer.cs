@@ -6,21 +6,36 @@ namespace CsharpPoker
 {
     public class FiveCardPokerScorer
     {
-        public HandRank GetScore(Hand hand) => Rankings().First(rule => rule.Eval(hand.Cards)).Strength;
+        public HandRank GetScore(Hand hand) => Rankings().First(rule => rule.eval(hand.Cards)).rank;
 
-        private List<Ranker> Rankings() =>
-            new List<Ranker>
+        private List<(Func<IEnumerable<Card>, bool> eval, HandRank rank)> Rankings() =>
+            new List<(Func<IEnumerable<Card>, bool> eval, HandRank rank)>
             {
-                        new Ranker(cards => HasRoyalFlush(cards), HandRank.RoyalFlush),
-                        new Ranker(cards => HasStraightFlush(cards), HandRank.StraightFlush),
-                        new Ranker(cards => HasFourOfAKind(cards), HandRank.FourOfAKind),
-                        new Ranker(cards => HasFullHouse(cards), HandRank.FullHouse),
-                        new Ranker(cards => HasFlush(cards), HandRank.Flush),
-                        new Ranker(cards => HasStraight(cards), HandRank.Straight),
-                        new Ranker(cards => HasThreeOfAKind(cards), HandRank.ThreeOfAKind),
-                        new Ranker(cards => HasPair(cards), HandRank.Pair),
-                        new Ranker(cards => true, HandRank.HighCard),
+                        (cards => HasRoyalFlush(cards), HandRank.RoyalFlush),
+                        (cards => HasStraightFlush(cards), HandRank.StraightFlush),
+                        (cards => HasFourOfAKind(cards), HandRank.FourOfAKind),
+                        (cards => HasFullHouse(cards), HandRank.FullHouse),
+                        (cards => HasFlush(cards), HandRank.Flush),
+                        (cards => HasStraight(cards), HandRank.Straight),
+                        (cards => HasThreeOfAKind(cards), HandRank.ThreeOfAKind),
+                        (cards => HasPair(cards), HandRank.Pair),
+                        (cards => true, HandRank.HighCard),
             };
+
+        // For C# 6 use a specialized class instead of System.ValueTuple
+        // private List<Ranker> Rankings() =>
+        //     new List<Ranker>
+        //     {
+        //                 new Ranker(cards => HasRoyalFlush(cards), HandRank.RoyalFlush),
+        //                 new Ranker(cards => HasStraightFlush(cards), HandRank.StraightFlush),
+        //                 new Ranker(cards => HasFourOfAKind(cards), HandRank.FourOfAKind),
+        //                 new Ranker(cards => HasFullHouse(cards), HandRank.FullHouse),
+        //                 new Ranker(cards => HasFlush(cards), HandRank.Flush),
+        //                 new Ranker(cards => HasStraight(cards), HandRank.Straight),
+        //                 new Ranker(cards => HasThreeOfAKind(cards), HandRank.ThreeOfAKind),
+        //                 new Ranker(cards => HasPair(cards), HandRank.Pair),
+        //                 new Ranker(cards => true, HandRank.HighCard),
+        //     };
 
         public Card HighCard(IEnumerable<Card> cards) => cards.Aggregate((result, nextCard) => result.Value > nextCard.Value ? result : nextCard);
 
